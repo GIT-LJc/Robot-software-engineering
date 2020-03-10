@@ -1,0 +1,4 @@
+<launch>
+  <node name="id_talker_node" pkg="robot_assignments" type="publisher_ID.py" output="screen"/>
+  <node name="subscribe_ID_node" pkg="robot_assignments" type="subscriber_ID.py" output="screen"/>
+</launch>
