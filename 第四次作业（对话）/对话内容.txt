@@ -1,0 +1,31 @@
+        if msg.data.find('introduce yourself') > -1:
+            self.soundhandle.say(
+                "I heard you want me to introduce myself. I am PartyBot. I am a party robot to serve you and have fun.")
+
+        elif msg.data.find('How old are you') > -1:
+            self.soundhandle.say(
+                "I heard you ask about my age. I am five years old.")
+
+        elif msg.data.find('story') > -1:
+            self.soundhandle.say("OK. I will tell you a story about three pigs.")
+            
+        elif msg.data.find('animal') > -1:
+            self.soundhandle.say(
+                "I heard you ask about what kind of animal I like. I like dogs more than cats.")
+
+        elif msg.data.find('hometown') > -1:
+            self.soundhandle.say(
+                "I heard you ask about my hometown. I am from China.")
+
+        elif msg.data.find('can you do') > -1:
+            self.soundhandle.say(
+                "I heard you ask me what can I do? I am a home robot. I am good at singing and dancing. I tell funny jokes and I take great photos of people")
+
+        elif msg.data.find('joke') > -1:
+            self.soundhandle.say(
+                "You want to hear a joke? What is orange and sounds like a parrot? Erm, It is a carrot. Ha ha ha")
+
+        else:
+            self.soundhandle.say(
+                "Well,I know that"
+            )

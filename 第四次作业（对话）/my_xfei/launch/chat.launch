@@ -1,0 +1,7 @@
+<launch>
+    <arg name="device" default="" />
+    <node name="xf_asr" pkg="my_xfei" type="xf_asr" output="screen"/>
+    <node name="partybot" pkg="my_xfei" type="party_bot.py" output="screen"/>
+    <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py" output="screen"/>
+      <param name="device" value="$(arg device)" />
+</launch>
