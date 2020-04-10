@@ -1,0 +1,169 @@
+<launch>
+    <arg name="device" default="" />
+    <node name="xf_asr_vision" pkg="vision" type="xf_asr_vision" output="screen"/>
+    <node name="partybot" pkg="vision" type="party_bot.py" output="screen"/>
+    <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py" output="screen"/>
+    <node name="take_photo_sub" pkg="vision" type="take_photo_sub.py" output="screen"/>
+    <!--<node name="face_detection" pkg="opencv_apps" type="face_detection_nodelet" output="screen"/>-->
+    <!--<node name="face_recognition_trainer" pkg="vision" type="face_recognition_trainer.py" output="screen"/>-->
+    <!--usb_cam-->
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap"/>
+    </node>
+    <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="/usb_cam/image_raw"/>
+        <param name="autosize" value="true" />
+    </node>
+    <!--usb_cam done-->
+
+    <!--face_recognition-->
+    <!--<arg name="launch_face_detection" default="true" />
+    <arg name="launch_trainer" default="true" />
+
+    <arg name="debug_view" default="true" />
+    <arg name="queue_size" default="100" doc="Specigy queue_size of input image subscribers" />
+
+    <arg name="data_dir" default="~/.ros/opencv_apps/face_data" />
+
+    <include file="$(find opencv_apps)/launch/face_detection.launch"
+            if="$(arg launch_face_detection)">
+        <arg name="image" value="$(arg image)" />
+        <arg name="debug_view" value="$(arg debug_view)" />
+        <arg name="node_name" value="face_detection" />
+        <arg name="use_opencv3" value="$(arg use_opencv3)" />
+        <arg name="use_opencv3_1" value="$(arg use_opencv3_1)" />
+        <arg name="use_opencv3_2" value="$(arg use_opencv3_2)" />
+        <arg name="use_opencv3_3" value="$(arg use_opencv3_3)" />
+    </include>
+
+    <node name="face_recognition" pkg="opencv_apps" type="face_recognition"
+            output="screen">
+        <param name="data_dir" value="$(arg data_dir)" />
+        <param name="queue_size" value="$(arg queue_size)" />
+        <remap from="image" to="$(arg image)" />
+        <remap from="faces" to="face_detection/faces" />
+    </node>
+
+  <node name="face_recognition_trainer" pkg="vision" type="face_recognition_trainer.py"
+        if="$(arg launch_trainer)" launch-prefix="xterm -fn 12x24 -e" respawn="true">
+    <remap from="image" to="$(arg image)" />
+    <remap from="faces" to="face_detection/faces" />
+    <remap from="train" to="face_recognition/train" />
+  </node>
+
+    <node name="$(anon debug_image_viewer)" pkg="image_view" type="image_view"
+            if="$(arg debug_view)">
+        <remap from="image" to="face_recognition/debug_image" />
+    </node>-->
+
+    <!--face_recognition end-->
+
+    <!--face_detection-->
+    <arg name="node_name_detection" default="face_detection" />
+    <arg name="use_opencv3" default="false" />
+    <arg name="use_opencv3_1" default="false" />
+    <arg name="use_opencv3_2" default="false" />
+    <arg name="use_opencv3_3" default="$(arg use_opencv3)" />
+
+    <arg name="image" default="image" doc="The image topic. Should be remapped to the name of the real image topic." />
+
+    <arg name="use_camera_info" default="false" doc="Indicates that the camera_info topic should be subscribed to to get the default input_frame_id. Otherwise the frame from the image message will be used." />
+    <arg name="debug_view" default="true" doc="Specify whether the node displays a window to show edge image" />
+    <arg name="queue_size" default="3" doc="Specigy queue_size of input image subscribers" />
+
+    <arg if="$(arg use_opencv3_1)"
+        name="face_cascade_name" default="$(find opencv3)/../OpenCV-3.1.0-dev/haarcascades/haarcascade_frontalface_alt.xml" doc="Face dtection cascade Filename" />
+    <arg if="$(arg use_opencv3_1)"
+        name="eyes_cascade_name" default="$(find opencv3)/../OpenCV-3.1.0-dev/haarcascades/haarcascade_eye_tree_eyeglasses.xml" doc="Eye dtection cascade Filename" />
+    <arg if="$(arg use_opencv3_2)"
+        name="face_cascade_name" default="$(find opencv3)/../OpenCV-3.2.0-dev/haarcascades/haarcascade_frontalface_alt.xml" doc="Face dtection cascade Filename" />
+    <arg if="$(arg use_opencv3_2)"
+        name="eyes_cascade_name" default="$(find opencv3)/../OpenCV-3.2.0-dev/haarcascades/haarcascade_eye_tree_eyeglasses.xml" doc="Eye dtection cascade Filename" />
+    <arg if="$(arg use_opencv3_3)"
+        name="face_cascade_name" default="$(find opencv3)/../OpenCV-3.3.1-dev/haarcascades/haarcascade_frontalface_alt.xml" doc="Face dtection cascade Filename" />
+    <arg if="$(arg use_opencv3_3)"
+        name="eyes_cascade_name" default="$(find opencv3)/../OpenCV-3.3.1-dev/haarcascades/haarcascade_eye_tree_eyeglasses.xml" doc="Eye dtection cascade Filename" />
+    <arg unless="$(arg use_opencv3)"
+        name="face_cascade_name" default="/usr/share/opencv/haarcascades/haarcascade_frontalface_alt.xml" doc="Face dtection cascade Filename" />
+    <arg unless="$(arg use_opencv3)"
+        name="eyes_cascade_name" default="/usr/share/opencv/haarcascades/haarcascade_eye_tree_eyeglasses.xml" doc="Eye dtection cascade Filename" />
+
+    <!-- face_detection.cpp -->
+    <node name="$(arg node_name_detection)" pkg="opencv_apps" type="face_detection"  >
+        <remap from="image" to="$(arg image)" />
+        <param name="use_camera_info" value="$(arg use_camera_info)" />
+        <param name="debug_view" value="$(arg debug_view)" />
+        <param name="queue_size" value="$(arg queue_size)" />
+        <param name="face_cascade_name" value="$(arg face_cascade_name)" />
+        <param name="eyes_cascade_name" value="$(arg eyes_cascade_name)" />
+    </node>
+
+    <!--face_detection end-->
+
+
+    <!--camshift-->
+    <arg name="node_name" default="camshift" />
+
+    <!--<arg name="image" default="image" doc="The image topic. Should be remapped to the name of the real image topic." />
+
+    <arg name="use_camera_info" default="false" doc="Indicates that the camera_info topic should be subscribed to to get the default input_frame_id. Otherwise the frame from the image message will be used." />
+    <arg name="debug_view" default="true" doc="Specify whether the node displays a window to show edge image" />
+    <arg name="queue_size" default="3" doc="Specigy queue_size of input image subscribers" />-->
+
+    <arg name="histogram" default="[0.0, 255.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]" doc="Histogram of tracked color object" />
+    <arg name="vmin" default="10" doc="Min threshould of lightness."/>
+    <arg name="vmax" default="230" doc="Max threshould of lightness." />
+    <arg name="smin" default="60" doc="Min value of saturation." />
+
+    <!-- camshift.cpp -->
+    <node name="$(arg node_name)" pkg="opencv_apps" type="camshift" >
+        <remap from="image" to="$(arg image)" />
+        <param name="use_camera_info" value="$(arg use_camera_info)" />
+        <param name="debug_view" value="$(arg debug_view)" />
+        <param name="queue_size" value="$(arg queue_size)" />
+        <rosparam param="histogram" subst_value="True">
+        $(arg histogram)
+        </rosparam>
+        <param name="vmin" value="$(arg vmin)" />
+        <param name="vmax" value="$(arg vmax)" />
+        <param name="smin" value="$(arg smin)" />
+    </node>
+
+    <!--camshift enf-->
+
+
+    <!--people detect-->
+    <arg name="node_name_people" default="people_detect" />
+
+    <!--<arg name="image" default="image" doc="The image topic. Should be remapped to the name of the real image topic." />
+
+    <arg name="use_camera_info" default="false" doc="Indicates that the camera_info topic should be subscribed to to get the default input_frame_id. Otherwise the frame from the image message will be used." />
+    <arg name="debug_view" default="true" doc="Specify whether the node displays a window to show edge image" />
+    <arg name="queue_size" default="3" doc="Specigy queue_size of input image subscribers" />-->
+
+    <arg name="hit_threshold" default="0" doc="Threshold for the distance between features and SVM classifying plane" />
+    <arg name="win_stride" default="8" doc="Window stride. It must be a multiple of block stride." />
+    <arg name="padding" default="32" doc="Mock parameter to keep the CPU interface compatibility. It must be (0,0)." />
+    <arg name="scale0" default="1.05" doc="Coefficient of the detection window increase." />
+    <arg name="group_threshold" default="2" doc="Coefficient to regulate the similarity threshold. When detected, some objects can be covered by many rectangles. 0 means not to perform grouping." />
+
+    <!-- people_detect.cpp -->
+    <node name="$(arg node_name_people)" pkg="opencv_apps" type="people_detect" >
+        <remap from="image" to="$(arg image)" />
+        <param name="use_camera_info" value="$(arg use_camera_info)" />
+        <param name="debug_view" value="$(arg debug_view)" />
+        <param name="queue_size" value="$(arg queue_size)" />
+        <param name="hit_threshold" value="$(arg hit_threshold)" />
+        <param name="win_stride" value="$(arg win_stride)" />
+        <param name="padding" value="$(arg padding)" />
+        <param name="scale0" value="$(arg scale0)" />
+        <param name="group_threshold" value="$(arg group_threshold)" />
+    </node>
+
+
+</launch>
