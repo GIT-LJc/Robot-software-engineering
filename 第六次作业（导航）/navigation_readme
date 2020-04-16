@@ -1,0 +1,18 @@
+系统设计：
+  在一个地图中，拥有四个区域：kitchen、bedroom、living room、study room
+  partybot发问：Where should I go?
+  客人回答地点：四个地点中的一个
+  机器人导航去指定地点
+  机器人到达指定地点并告知客人
+  重复上述行为
+
+
+文件说明：
+navigation：代码包
+map：地图
+png：rqt_graph
+ch3_pkg：navigation里用到了ch3_pkg中的Num.msg（在navigation里自定义消息Num.msg总出现不能引入的错误，所以消息另外放一个包里了）
+
+
+运行：
+roslaunch navigation my_world.launch   （map_file:=...）
