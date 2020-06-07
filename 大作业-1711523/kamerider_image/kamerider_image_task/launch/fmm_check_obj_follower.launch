@@ -1,0 +1,7 @@
+<launch>
+
+
+    <node pkg="kamerider_image_api" name="roi_follower" type="object_follower_roi_test.py" output="screen"/>
+
+
+</launch>

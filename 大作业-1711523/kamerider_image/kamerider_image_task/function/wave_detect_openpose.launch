@@ -1,0 +1,13 @@
+<!--Check the person who wave, and publish the target's potion -->
+
+<launch>
+    <node pkg="kamerider_image_openpose" name="wave_detect" type="openpose_wave_detect.py" required="false" >
+        <!--Output image-->
+        <remap from="/openpose/img"                 to="/image/test"/>
+        <!--Input image-->
+        <remap from="/usb_cam/image_raw"            to="/usb_cam/image_raw"/>
+        <!--object postion in view-->
+        <remap from="/openpose/wave"                to="roi"/>
+    </node>
+
+</launch>

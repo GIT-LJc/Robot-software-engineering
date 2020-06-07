@@ -1,0 +1,19 @@
+<launch>
+
+    <!--Using API to check wave-->
+    <node pkg="kamerider_image_api" name="wave_detect" type="wave_detect.py" required="true" output="screen">
+        <!--Output image-->
+        <remap from="/image/test"                   to="/image/test"/>
+        <!--Input image-->
+        <remap from="/usb_cam/image_raw"            to="/camera/rgb/image_raw"/>
+        <!--object postion in view-->
+        <remap from="roi"                           to="roi"/>
+        <!--check gender-->
+        <param name="check_gender"                  value="false"/>
+        <!--A path to save image-->
+        <param name="image_temp_save_path"          value="/home/qian/catkin_ws/src/fmm_src/kamerider_image/kamerider_image_api/imgfile/"/>
+    </node>
+
+
+
+</launch>

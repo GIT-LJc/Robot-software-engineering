@@ -1,0 +1,15 @@
+<!--Check the bookshelf in the view, and pub the postion of target-->
+
+<launch>
+    <!--now this just check the bookshelf-->
+    <node pkg="kamerider_image_api" name="check_book" type="bookshelf_test.py" required="true">
+        <!--Output image-->
+        <param name="image_test_topic_name"     value="/image/test_object"/>
+        <!--Input image-->
+        <param name="image_raw_topic_name"      value="/camera/rgb/image_raw"/>
+        <!--object postion in view-->
+        <param name="object_view_topic_name"    value="roi"/>
+    </node>
+    
+    <node pkg="kamerider_image_pcl" name="depth_calculate" type="pcd_getpos_test" />
+</launch>

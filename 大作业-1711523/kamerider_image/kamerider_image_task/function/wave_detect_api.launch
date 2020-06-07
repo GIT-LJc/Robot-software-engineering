@@ -1,0 +1,16 @@
+<!--Check the person who wave, and publish the target's potion -->
+
+<launch>
+    <node pkg="kamerider_image_api" name="wave_detect" type="wave_detect.py" required="false" output="screen">
+        <!--Output image-->
+        <remap from="/image/test"                   to="/image/test"/>
+        <!--Input image-->
+        <remap from="/usb_cam/image_raw"            to="/usb_cam/image_raw"/>
+        <!--object postion in view-->
+        <remap from="roi"                           to="roi"/>
+
+        <!--check gender-->
+        <param name="check_gender"                  value="true"/>
+    </node>
+
+</launch>

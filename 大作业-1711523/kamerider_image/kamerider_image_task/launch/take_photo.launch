@@ -1,0 +1,26 @@
+<launch>
+
+    <include file="$(find usb_cam)/launch/usb_cam-test.launch" />
+
+
+   <!-- <include file="/home/qian/catkin_ws/src/rc-home-edu-learn-ros/rchomeedu_vision/launch/wave.launch" />-->
+    <node pkg="kamerider_image_api" name="wave_detect" type="wave_detect.py" required="false" output="screen">
+        <!--Output image-->
+        <param name="image_test_topic_name"         value="/iamge/test_object"/>
+        <!--Input image-->
+        <param name="image_raw_topic_name"          value="/camera/rgb/image_raw"/>
+        <!--object postion in view-->
+        <param name="object_view_topic_name"        value="roi"/>
+        <!--check gender-->
+        <param name="check_gender"                  value="false" />
+    </node>
+  
+    <node pkg="xfei_asr" type="photo_recog" name="photo_recog" output="screen"/>
+
+    <node pkg="xfei_asr" type="take_photo_voice" name="take_photo_voice" output="screen"/>
+
+
+  <node name="take_photo" pkg="kamerider_image_api" type="take_photo_sub.py" output="screen"/>
+  <node name="photo_control" pkg="kamerider_image_api" type="photo_control.py" output="screen"/>
+
+</launch>
